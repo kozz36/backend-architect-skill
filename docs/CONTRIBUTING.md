@@ -49,10 +49,64 @@ Every claim about a **version number, feature, or security status** must include
 
 ## How to Submit
 
+### Pull Request Workflow (REQUIRED)
+
+This repo follows the **issue-first, PR-mandatory** workflow:
+
+```
+1. Open an issue describing the change
+2. Wait for `status:approved` label (maintainer review)
+3. Create branch: `type/description` (e.g., `feat/auth-section`, `fix/redis-typo`)
+4. Implement changes with conventional commits
+5. Update `docs/CHANGELOG.md`
+6. Open PR with `Closes #N` in body
+7. Add exactly one `type:*` label
+8. Wait for automated checks to pass
+9. Maintainer merges
+```
+
+**NEVER push directly to `main`.** Direct pushes are blocked by branch protection.
+
+### Branch Naming
+
+```
+^(feat|fix|chore|docs|style|refactor|perf|test|build|ci|revert)\/[a-z0-9._-]+$
+```
+
+| Type | Example |
+|------|---------|
+| `feat/` | `feat/pgvector-hybrid-search` |
+| `fix/` | `fix/jwt-eddsa-code` |
+| `docs/` | `docs/temporal-section` |
+| `chore/` | `chore/update-prisma-7.9` |
+
+### Conventional Commits
+
+Format: `type(scope): description`
+
+| Type | PR Label | When |
+|------|----------|------|
+| `feat` | `type:feature` | New section or capability |
+| `fix` | `type:bug` | Correction or error |
+| `docs` | `type:docs` | Documentation change |
+| `refactor` | `type:refactor` | Restructure without content change |
+| `chore` | `type:chore` | Maintenance, tool updates |
+
+### Commit Checklist
+
+- [ ] Linked an approved issue (`Closes #N`)
+- [ ] Added exactly one `type:*` label
+- [ ] Conventional commit format
+- [ ] No `Co-Authored-By` trailers
+- [ ] Playwright verification included for version claims
+- [ ] `docs/CHANGELOG.md` updated
+
+Original direct-push workflow (DEPRECATED — kept for historical reference):
+
 1. Fork the repo
-2. Edit the relevant `SKILL.md` (or create new version directory)
-3. Update `docs/CHANGELOG.md` with your changes
-4. Open a PR referencing the verification source
+2. Edit the relevant `SKILL.md`
+3. Update `docs/CHANGELOG.md`
+4. ~~Push to main~~ → **Use PR workflow above**
 
 ## Version Policy
 
