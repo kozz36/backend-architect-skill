@@ -1,6 +1,9 @@
 # 🏗️ backend-architect-skill
 
-> Strategic backend architecture decisions for AI agents and engineering teams. Based on real ecosystem research validated against live sources (May 2026).
+> **General-purpose** backend architecture skill for **stack definition at project start**.
+> Guides API design, database/ORM selection, auth patterns, caching, system design,
+> platform engineering, and AI/vector infrastructure.
+> Based on real ecosystem research validated against live sources (May 2026).
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 

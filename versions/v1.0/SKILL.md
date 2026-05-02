@@ -1,8 +1,11 @@
 ---
 name: backend-architect
 description: >
-  Backend architecture expert for API design, database modeling, auth patterns, caching, and system design.
-  Trigger: When designing APIs, choosing databases, planning auth systems, scaling backends, or making architecture decisions.
+  General-purpose backend architecture skill for stack definition at project start.
+  Guides API design, database/ORM selection, auth patterns, caching, and system design.
+  Trigger: When starting a new backend project and need to define the stack,
+  choosing between languages/frameworks (Node/Django/Go/Rust/etc.), selecting databases,
+  or making cross-platform architectural decisions.
 license: Apache-2.0
 metadata:
   author: kozz36
