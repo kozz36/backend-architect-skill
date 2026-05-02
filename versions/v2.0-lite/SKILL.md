@@ -1,5 +1,5 @@
 ---
-name: backend-architect
+name: backend-architect-lite
 description: >
   Concise general-purpose backend architecture skill for stack definition at project start.
   Covers API design, database/ORM selection, auth patterns, caching, system design.
@@ -8,20 +8,18 @@ description: >
 license: Apache-2.0
 metadata:
   author: kozz36
-  version: "2.0"
+  version: "2.0-lite"
 ---
 
 ## When to Use
 
-- Designing a new API (REST, GraphQL, gRPC, tRPC)
-- Choosing a database, ORM, or sync engine for a project
-- Planning authentication and authorization systems
-- Scaling a backend or deciding between monolith and microservices
-- Implementing caching, background jobs, or event-driven patterns
+- Starting a new backend project and need rapid framework/stack selection
+- Evaluating databases, ORMs, or auth strategies for a team
+- Designing API protocols (REST, GraphQL, gRPC, tRPC)
+- Planning caching, background jobs, or event-driven patterns
 - Setting up observability, health checks, or load testing
-- Designing AI/vector infrastructure or agentic orchestration
+- Integrating AI/vector infrastructure or agent orchestration
 - Planning local-first or edge-synchronized architectures
-- Any architectural decision with long-term tradeoffs
 
 ---
 
@@ -31,7 +29,7 @@ metadata:
 
 | Scenario | Framework | Reason |
 |----------|-----------|--------|
-| Python — general API | **FastAPI** | Async, OpenAPI auto-gen, Pydantic validation layers |
+| Python — general API | **FastAPI** | Async, OpenAPI auto-gen, Pydantic validation |
 | Python — high performance | **Litestar** | Faster than FastAPI, stricter typing |
 | Python — content/admin heavy | **Django + DRF** | ORM, admin, batteries included |
 | Node.js — general API | **Fastify** | Fast, schema-based, great plugin ecosystem |
@@ -55,96 +53,42 @@ metadata:
 | Need | Choice |
 |------|--------|
 | Primary relational store | **PostgreSQL** — JSONB, arrays, full-text search, extensions |
-| Embedded / edge / serverless | **SQLite** — with Litestream (replication), rqlite (Raft), or Turso (distributed libSQL) |
-| Cache / queue / pub-sub / multi-tier memory | **Redis** |
-| Document store (justified) | **MongoDB** — only when schema is genuinely variable |
+| Embedded / edge / serverless | **SQLite** — Litestream (replication), Turso (libSQL), rqlite (Raft) |
+| Cache / queue / pub-sub | **Redis** |
+| Document store (justified) | **MongoDB** — only when schema genuinely variable |
 | Time-series | **TimescaleDB** (PostgreSQL extension) or **InfluxDB** |
 | Vector search / semantic retrieval | **pgvector** (PostgreSQL extension) or **Pinecone** / **Milvus** |
 | Local-first sync engine | **PowerSync**, **Turso**, **ElectricSQL**, or **Replicache** |
 
 ### PostgreSQL as Universal Store
 
-PostgreSQL now serves transactional, relational, analytical, AND semantic workloads:
-- **JSONB**: schemaless patterns inside ACID transactions
-- **Full-text search**: native tsvector/tsquery
-- **pgvector**: first-class vector support (cosine distance, inner product / dot product, HNSW/IVF indexing)
-- **TimescaleDB**: hypertables for time-series data
+PostgreSQL now serves transactional, relational, analytical, AND semantic workloads via **JSONB**, native full-text search, **pgvector** (HNSW/IVF indexing), and **TimescaleDB**.
 
-Use **pgvector** as the default vector strategy for teams already operating massive PostgreSQL estates. Eliminates data synchronization overhead with external vector stores.
+Use **pgvector** as the default vector strategy for teams already on PostgreSQL. Eliminates data sync overhead with external vector stores.
 
 ### SQLite Renaissance (2024–2026)
 
-SQLite is now production-viable for distributed and edge workloads:
+Production-viable for distributed and edge workloads:
 - **Litestream**: streams WAL to S3/GCS — free disaster recovery
-- **Turso**: libSQL fork, edge-deployed, HTTP API, per-tenant DBs, embedded read replicas at 0ms latency
+- **Turso**: libSQL fork, edge-deployed, HTTP API, per-tenant DBs
 - **rqlite**: clustered SQLite with Raft — replicated, lightweight
-- **PowerSync**: bidirectional delta sync between PostgreSQL central and local SQLite via persistent WebSockets
+- **PowerSync**: bidirectional delta sync PostgreSQL ↔ SQLite
 
 Use when: single-region, low-concurrency writes, cost-sensitive, per-tenant isolation, or local-first architectures.
-
-### Local-First & Edge Synchronization
-
-| Sync Engine | Architecture | Best For |
-|-------------|--------------|----------|
-| **PowerSync** | PostgreSQL ↔ SQLite via WebSocket delta sync, automatic conflict resolution | Complex apps requiring strict referential integrity on client and server |
-| **Turso** | libSQL edge deployment with embedded read replicas, branching workflows | Portability and 0ms read latency at the edge |
-| **ElectricSQL** | Active sync from PostgreSQL to local clients, deterministic conflict resolution | Rapid prototyping and migration of existing Postgres apps to offline-first |
-| **Replicache** | In-memory transactional store over IndexedDB, explicit sync control, undo/redo | Document editors, collaboration tools (limit ~100MB data) |
-
-### Vector Databases & RAG Infrastructure
-
-| Solution | Deployment | Best For |
-|----------|------------|----------|
-| **pgvector** | PostgreSQL native extension | Teams already on Postgres; ACID semantic + relational in one store |
-| **Pinecone** | Cloud-native, serverless SaaS | Enterprise speed-to-market; zero infrastructure maintenance |
-| **Milvus** | Open-source, Kubernetes-native | Massive-scale similarity search (image search, bioinformatics) |
-| **Weaviate** | Open-source, schema-flexible with optional strict mode | Multimodal apps combining semantic + lexical search |
-| **Chroma** | Lightweight, embedded or client-server | Rapid LLM prototyping, LangChain integration |
-
-**Key algorithms**: HNSW (probabilistic multilayer graph navigation), IVF (inverted file index), Product Quantization (memory compression).
-
-**Dimensionality tradeoff**: 1536-dim (OpenAI text-embedding-3-small) for deep semantic accuracy; 384-dim (all-MiniLM-L6-v2) trades semantic depth for significantly lower latency and memory. Actual speedup depends on index parameters — benchmark with your dataset.
-
-### ORM vs Raw SQL
-
-```
-Schema-first, complex queries → Raw SQL (psycopg3, asyncpg) — MUST use parameterized statements: text("... WHERE id = :id").bindparams(id=user_id)
-Rapid prototyping, teams      → ORM
-Mixed (recommended)           → ORM for CRUD, raw SQL for reports/analytics
-```
 
 ### ORM Choices
 
 | Ecosystem | ORM | Notes |
 |-----------|-----|-------|
-| Python | **SQLAlchemy 2.0** | Mature, async support, unit-of-work, Core expressions |
+| Python | **SQLAlchemy 2.0** | Mature, async, unit-of-work, Core expressions |
 | Python (FastAPI) | **SQLModel** | SQLAlchemy + Pydantic, less boilerplate |
-| Node.js (TypeScript) | **Drizzle** | Type-safe, SQL-like syntax, no magic, migration lifecycle |
-| Node.js (any) | **Prisma 7** | Schema-first, migrations, great DX |
+| Node.js (TypeScript) | **Drizzle** | Type-safe, SQL-like, migration lifecycle |
+| Node.js (any) | **Prisma 7** | Schema-first, great DX |
 
 ### Patterns
-
 - **Repository Pattern**: abstracts data access; inject via DI for testability
-- **Unit of Work**: wraps multiple repos in one transaction (SQLAlchemy Session is UoW)
-- **CQRS Light**: separate read models (optimized queries) from write models (ORM entities); no full event sourcing needed for most apps
-
-```python
-# Repository pattern with SQLAlchemy 2.0
-# WARNING: async sessions should set expire_on_commit=False and return DTOs
-# to avoid DetachedInstanceError when accessing lazy-loaded attributes outside session scope
-class UserRepository:
-    def __init__(self, session: AsyncSession):
-        self.session = session
-
-    async def get_by_id(self, user_id: UUID) -> User | None:
-        result = await self.session.get(User, user_id)
-        return result
-
-    async def get_by_email(self, email: str) -> User | None:
-        stmt = select(User).where(User.email == email)
-        result = await self.session.execute(stmt)
-        return result.scalar_one_or_none()
-```
+- **Unit of Work**: wraps multiple repos in one transaction
+- **CQRS Light**: separate read models (optimized queries) from write models (ORM entities)
 
 ---
 
@@ -162,54 +106,18 @@ class UserRepository:
 
 ### REST Best Practices
 
-**Versioning**: URL-based wins in practice (`/api/v1/users`) — header versioning hurts caching and tooling.
-
-**Pagination**:
-- Offset (`?page=2&limit=20`): simple, but expensive on large datasets (OFFSET scans)
-- Cursor (`?after=eyJpZCI6MTAwfQ`): scalable, consistent under mutations — prefer for feeds and large tables
-
-**Rate Limiting**: token bucket or sliding window. Headers: `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset` (IETF standard).
-
-**Webhook Design**:
-```python
-# Idempotency: include event ID, receiver deduplicates
-# HMAC signing: sign payload with shared secret
-import hmac, hashlib
-
-def verify_webhook(payload: bytes, signature: str, secret: str) -> bool:
-    expected = hmac.new(
-        secret.encode(), payload, hashlib.sha256
-    ).hexdigest()
-    return hmac.compare_digest(f"sha256={expected}", signature)
-
-# Retry: exponential backoff (1s, 5s, 30s, 5m, 30m)
-# Delivery guarantee: at-least-once — always include event_id for dedup
-```
-
-### OpenAPI
-
-FastAPI generates OpenAPI automatically. For other frameworks:
-- **Litestar**: built-in OpenAPI
-- **Fastify**: `@fastify/swagger` + `@fastify/swagger-ui`
-- **Go**: `swaggo/swag` or `oapi-codegen`
-
-Always include: request/response schemas, error responses (400, 401, 403, 404, 422, 500), auth scheme.
+- **Versioning**: URL-based wins (`/api/v1/users`) — header versioning hurts caching
+- **Pagination**: Offset for simple; **Cursor** for large datasets (consistent under mutations)
+- **Rate Limiting**: token bucket or sliding window. Headers: `RateLimit-Limit`, `RateLimit-Remaining`, `RateLimit-Reset`
+- **Webhooks**: include event ID for idempotency; HMAC-sign payload; exponential backoff retry
 
 ### Backend for Frontend (BFF)
 
-The BFF pattern provisions a dedicated backend per client experience (iOS, Web, Android) rather than forcing a single universal API.
+Dedicated backend per client (iOS, Web, Android) to aggregate downstream services, translate protocols, and hide internal schemas.
 
-**BFF Responsibilities**:
-- Aggregating data from dozens of downstream microservices
-- Translating protocols (e.g., internal gRPC → public JSON)
-- Hiding internal data schemas from frontend clients (security posture)
-- Reducing payload size for mobile (bandwidth/battery optimization)
+**Anti-pattern**: BFF must remain spartan. Do NOT absorb domain validations or heavy transactional logic.
 
-**Anti-pattern warning**: BFF must remain spartan. Do NOT absorb domain validations or heavy transactional logic — that creates an accidental integration monolith.
-
-**Best practice**: Write BFF in the same stack as the frontend team (typically TypeScript/Node.js with Fastify/Hono for web clients), host in the same monorepo, and assign ownership to the frontend team. Mobile BFFs (iOS/Android) are usually shared or language-agnostic. Reserve deep microservice design for pure backend engineers.
-
-**Protocol shift**: Modern BFF increasingly moves from passive HTTP request/response to persistent WebSockets and GraphQL subscriptions for real-time state propagation (inventory, stocks, AI reasoning streams).
+**Best practice**: Same stack as frontend team. Host in same monorepo. Assign ownership to frontend team.
 
 ---
 
@@ -222,30 +130,9 @@ Access token:  short-lived (15 min), stateless, signed
 Refresh token: long-lived (7–30 days), stored in DB, rotated on use
 ```
 
-**Signing algorithm priority**: EdDSA (Ed25519) > ES256 (ECDSA P-256) > RS256 (RSA 2048) > HS256 (shared secret — avoid for multi-service)
+**Signing priority**: EdDSA (Ed25519) > ES256 > RS256 > HS256
 
-```python
-# FastAPI JWT pattern — HMAC (default, safest for single-service)
-from datetime import datetime, timedelta, UTC
-import jwt, os, secrets
-
-SECRET_KEY = os.environ["JWT_SECRET_KEY"]  # 32+ bytes for HS256
-ALGORITHM = "HS256"
-
-def create_access_token(subject: str) -> str:
-    expire = datetime.now(UTC) + timedelta(minutes=15)
-    return jwt.encode({"sub": subject, "exp": expire, "aud": "my-api", "iss": "auth-service"}, SECRET_KEY, algorithm=ALGORITHM)
-
-def create_refresh_token(subject: str) -> dict:
-    expire = datetime.now(UTC) + timedelta(days=30)
-    token = secrets.token_urlsafe(32)
-    # Store hash(token) + expiry in DB
-    return {"token": token, "expires_at": expire.isoformat()}
-```
-
-**EdDSA (Ed25519) for multi-service**: Requires `PyJWT[crypto]` + `cryptography`. Load PEM key or generate `Ed25519PrivateKey` object. Sign with `jwt.encode(payload, private_key, algorithm="EdDSA")`.
-
-**Refresh token rotation**: invalidate old token on use, issue new pair. Track family for breach detection (if rotated token is reused → family was stolen → revoke all).
+**Refresh token rotation**: invalidate old on use, issue new pair. Track family for breach detection.
 
 ### Auth Protocols
 
@@ -253,7 +140,7 @@ def create_refresh_token(subject: str) -> dict:
 |----------|--------|
 | First-party app (SPA/mobile) | OAuth2 + PKCE or JWT (access + refresh) |
 | First-party app (web app) | Sessions (Redis store) or JWT |
-| Third-party OAuth (Google, GitHub) | OAuth2 + PKCE (Authorization Code flow) |
+| Third-party OAuth | OAuth2 + PKCE (Authorization Code flow) |
 | Machine-to-machine / S2S | API keys (hashed in DB) or client_credentials OAuth2 |
 | Enterprise SSO | SAML or OIDC |
 | Passwordless 2025 | **Passkeys** (WebAuthn) — phishing-resistant, UX win |
@@ -262,16 +149,12 @@ def create_refresh_token(subject: str) -> dict:
 
 ```
 Sessions (server-side):
-  + Instant revocation
-  + No token size limit
-  - Requires shared session store (Redis) for multi-instance
-  - Stateful
+  + Instant revocation, no token size limit
+  - Requires shared store (Redis) for multi-instance
 
 JWTs (stateless):
-  + No shared store needed
-  + Works across services
+  + No shared store needed, works across services
   - Revocation requires denylist (Redis) or short TTL
-  - Token size grows with claims
 ```
 
 Use sessions for: monolith, traditional web apps, admin panels.
@@ -279,25 +162,10 @@ Use JWTs for: microservices, mobile apps, SPAs, multi-tenant APIs.
 
 ### Authorization
 
-**RBAC** (Role-Based): roles → permissions. Simple, audit-friendly. Use for most apps.
-
-**ABAC** (Attribute-Based): policies evaluate attributes (user, resource, environment). Use for complex multi-tenant or compliance-heavy systems.
-
-```python
-# FastAPI RBAC dependency — supports multiple roles per user
-from fastapi import Depends, HTTPException, status
-
-def require_any_role(*roles: str):
-    def dependency(current_user: User = Depends(get_current_user)):
-        if not any(r in current_user.roles for r in roles):
-            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
-        return current_user
-    return dependency
-
-# Usage
-@router.delete("/users/{id}", dependencies=[Depends(require_any_role("admin", "superuser"))])
-async def delete_user(id: UUID): ...
-```
+| Pattern | Use When |
+|---------|----------|
+| **RBAC** (Role-Based) | roles → permissions. Simple, audit-friendly. Default for most apps. |
+| **ABAC** (Attribute-Based) | policies evaluate user/resource/environment attributes. Complex multi-tenant / compliance. |
 
 ### Zero-Trust for Autonomous AI
 
@@ -312,104 +180,56 @@ async def delete_user(id: UUID): ...
 
 ### Default Stack
 
-**Redis** — primary cache, session store, pub/sub, rate limiter, job queue, and multi-tier memory for agent state.
+**Redis** — primary cache, session store, pub/sub, rate limiter, job queue, multi-tier agent memory.
 
-Connection pooling: always use a pool. FastAPI + Redis: `redis.asyncio.ConnectionPool` with `max_connections=20`.
+Connection pooling: always use a pool. `max_connections=20` tuned to DB pool size.
 
 ### Patterns
 
 | Pattern | When |
 |---------|------|
-| **Cache-Aside** (Lazy) | Read-heavy, tolerate stale data. Check cache → miss → read DB → populate cache |
-| **Write-Through** | Write to cache and DB together. Consistent but write latency |
-| **Write-Behind** | Write to cache, async flush to DB. High write throughput, risk of loss |
-| **Read-Through** | Cache fetches from DB on miss transparently (library handles it) |
+| **Cache-Aside** (Lazy) | Read-heavy, tolerate stale data |
+| **Write-Through** | Consistent but write latency |
+| **Write-Behind** | High write throughput, risk of loss |
+| **Read-Through** | Library handles miss transparently |
 
-### Invalidation Strategies
+### Invalidation
 
 ```
-TTL-based:        simplest, stale within window — good for reference data
-Event-driven:     publish cache-invalidation event on write — consistent, complex
-Tag-based:        tag cache keys by entity, flush by tag — good for related data
-```
-
-```python
-# Cache-Aside pattern with FastAPI + Redis
-# NOTE: UserDTO is a Pydantic model (serialization layer). Never cache SQLAlchemy ORM objects directly.
-import json
-
-async def get_user(user_id: UUID, redis: Redis, db: AsyncSession) -> UserDTO:
-    cache_key = f"user:{user_id}"
-    cached = await redis.get(cache_key)
-    if cached:
-        return UserDTO.model_validate_json(cached)
-
-    user = await UserRepository(db).get_by_id(user_id)
-    if user:
-        dto = UserDTO.model_validate(user)
-        await redis.setex(cache_key, 300, dto.model_dump_json())  # TTL: 5 min
-    return user
+TTL-based:     simplest, stale within window — good for reference data
+Event-driven:  publish invalidation event on write — consistent, complex
+Tag-based:     tag keys by entity, flush by tag — good for related data
 ```
 
 ---
 
 ## 6. AI & Agentic Orchestration
 
-### Vector Search Implementation (pgvector)
+### pgvector (PostgreSQL native)
 
-```sql
--- Enable extension
-CREATE EXTENSION IF NOT EXISTS vector;
-
--- Table with embeddings
-CREATE TABLE documents (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    content TEXT NOT NULL,
-    embedding VECTOR(1536),  -- OpenAI text-embedding-3-small default
-    metadata JSONB
-);
-
--- HNSW index for approximate nearest neighbor search
-CREATE INDEX idx_documents_embedding ON documents
-USING hnsw (embedding vector_cosine_ops)
-WITH (m = 16, ef_construction = 64);
-
--- Semantic search query
--- NOTE: <=> returns cosine DISTANCE (0 = identical, 2 = opposite).
--- Cosine similarity of normalized vectors is in [-1, 1].
--- Use 1 - distance only if you know vectors are normalized; otherwise use distance directly.
--- If vectors aren't normalized, use distance directly and ORDER BY ascending.
-SELECT id, content, 1 - (embedding <=> query_embedding) AS similarity
-FROM documents
-WHERE metadata @> '{"category": "technical"}'
-ORDER BY embedding <=> query_embedding
-LIMIT 10;
-```
+Enable `CREATE EXTENSION vector;` — 1536-dim default. HNSW index for ANN search. Cosine distance `<=>` for semantic retrieval. Combine with `metadata @> ...` JSONB filters.
 
 ### Agent Orchestration Frameworks
 
 | Framework | Paradigm | Best For |
 |-----------|----------|----------|
-| **LangGraph** | Stateful graph workflows in Python/TypeScript | Auditable, predictable multi-step LLM pipelines with recoverable memory |
-| **Microsoft AutoGen** | Multi-agent collaborative dialogue (Python/.NET) | Enterprise production: error handling, distributed gRPC, OpenTelemetry |
-| **CrewAI** | Role-driven agent teams (Python) | Rapid prototyping of hierarchical business workflows |
-| **Semantic Kernel** | Dynamic function binding (.NET/Python) | Azure-native apps with deep semantic memory and deterministic planners |
+| **LangGraph** | Stateful graph workflows | Auditable, predictable multi-step LLM pipelines |
+| **AutoGen** | Multi-agent collaborative dialogue | Enterprise: error handling, distributed gRPC, OTel |
+| **CrewAI** | Role-driven agent teams | Rapid prototyping of hierarchical business workflows |
+| **Semantic Kernel** | Dynamic function binding | Azure-native apps with semantic memory |
 
 ### Redis as Multi-Tier Agent Memory
 
-Redis has evolved from peripheral cache to the central nervous system of agent architectures:
-- **Conversation threading**: sub-millisecond context retrieval across distributed agents
-- **State compaction**: long-term/short-term memory hierarchy management
-- **Vector search**: sub-millisecond knowledge base retrieval impacting reasoning coherence
-- **Volatile state management**: real-time mutation across agent swarms
+- Conversation threading: sub-millisecond context retrieval
+- State compaction: long-term/short-term memory hierarchy
+- Vector search: sub-millisecond knowledge base retrieval
+- Volatile state: real-time mutation across agent swarms
 
 ---
 
 ## 7. Architecture Patterns
 
 ### Monolith First (consensus 2024–2026)
-
-Teams under 20 engineers: start with a monolith. Microservices add operational complexity that kills small teams.
 
 ```
 < 20 engineers    → Monolith (deploy as one unit)
@@ -418,86 +238,53 @@ Teams under 20 engineers: start with a monolith. Microservices add operational c
 > 50 engineers, org boundaries → Microservices (Conway's Law)
 ```
 
-### Modular Monolith Structure
+### Modular Monolith
 
 ```
 src/
 ├── users/          # bounded context
 │   ├── domain/     # entities, value objects
-│   ├── app/        # use cases, services
-│   ├── infra/      # repository impl, external calls
+│   ├── app/        # use cases
+│   ├── infra/      # repo impl, external calls
 │   └── api/        # routes, schemas
 ├── billing/
 ├── notifications/
-└── shared/         # cross-cutting (auth, db, config)
+└── shared/         # auth, db, config
 ```
 
-Modules communicate via **interfaces** (not direct imports across layers). This allows future extraction to services.
+Modules communicate via interfaces (not direct cross-imports). Enables future extraction to services.
 
 ### Clean / Hexagonal Architecture
 
 ```
-Domain (entities, value objects) — no framework dependencies
-Application (use cases) — depends on domain + ports (interfaces)
-Infrastructure (adapters) — implements ports: DB, HTTP, queue
-API (delivery) — FastAPI routes call application use cases
-```
-
-```python
-# Port (interface) in application layer
-from abc import ABC, abstractmethod
-
-class UserRepository(ABC):
-    @abstractmethod
-    async def get_by_id(self, user_id: UUID) -> User | None: ...
-    @abstractmethod
-    async def save(self, user: User) -> None: ...
-
-# Adapter (implementation) in infrastructure layer
-class PostgresUserRepository(UserRepository):
-    def __init__(self, session: AsyncSession):
-        self.session = session
-
-    async def get_by_id(self, user_id: UUID) -> User | None:
-        return await self.session.get(UserModel, user_id)
+Domain (entities) → no framework dependencies
+Application (use cases) → depends on domain + ports (interfaces)
+Infrastructure (adapters) → implements ports: DB, HTTP, queue
+API (delivery) → routes call application use cases
 ```
 
 ### Event-Driven
 
 | Tool | Use When |
 |------|----------|
-| **Redis Streams** | Simple pub/sub, same infra as cache, **at-least-once** via consumer groups and XACK |
-| **NATS** | Lightweight, JetStream for persistence, fast fan-out |
+| **Redis Streams** | Simple pub/sub, same infra as cache, at-least-once via XACK |
+| **NATS** | Lightweight, JetStream persistence, fast fan-out |
 | **RabbitMQ** | Complex routing, existing AMQP ecosystem |
 | **Kafka** | High throughput, event log, replay, analytics pipeline |
 
-Rule: start with Redis Streams. Migrate to Kafka when you need replay, audit log, or > 100k msg/s.
+Rule: start with Redis Streams. Migrate to Kafka when you need replay or > 100k msg/s.
 
 ### Background Jobs & Resilient Workflows
 
 | Tool | Ecosystem | Use When |
 |------|-----------|----------|
-| **Dramatiq** | Python | Preferred over Celery: simpler, reliable, middleware-based |
+| **Dramatiq** | Python | Preferred: simpler, reliable, middleware-based |
 | **ARQ** | Python | Async-native, Redis-backed, lightweight |
 | **BullMQ** | Node.js | Redis-backed, delayed jobs, rate limiting built-in |
 | **Temporal** | Any | Long-running workflows, sagas, crash-proof execution |
 | **Inngest** | Node.js | Serverless-friendly, event-driven functions |
 
-**Temporal**: Represents a qualitative leap for mission-critical systems. It abstracts state management and retry routing, promising "crash-proof execution" — workflows resume via deterministic replay from event history, not by serializing native stack frames. This survives outages from seconds to months.
-
-```python
-# Dramatiq example (Python)
-import dramatiq
-from dramatiq.brokers.redis import RedisBroker
-
-broker = RedisBroker(host="localhost", port=6379, db=0)
-dramatiq.set_broker(broker)
-
-@dramatiq.actor(max_retries=3, min_backoff=1000)
-def send_welcome_email(user_id: str) -> None:
-    user = get_user(user_id)
-    email_service.send(user.email, "Welcome!")
-```
+**Temporal**: workflows resume via deterministic replay from event history (not native stack frames). Survives outages from seconds to months.
 
 ---
 
@@ -506,90 +293,28 @@ def send_welcome_email(user_id: str) -> None:
 ### Test Pyramid
 
 ```
-Unit tests (70%)      — domain logic, pure functions, no I/O
+Unit tests (70%)       — domain logic, pure functions, no I/O
 Integration tests (20%) — real DB, real Redis, Testcontainers
-E2E / load tests (10%)  — full stack, production-like
+E2E / load tests (10%) — full stack, production-like
 ```
 
-**Rule**: mock external HTTP calls (httpx mock, respx), but use REAL databases in integration tests. Mocking Postgres is lying to yourself.
+**Rule**: mock external HTTP calls. Use REAL databases in integration tests. Mocking Postgres is lying to yourself.
 
-### Testcontainers
+### Testing Tools
 
-```python
-# pytest + testcontainers for real PostgreSQL
-import pytest, pytest_asyncio
-from testcontainers.postgres import PostgresContainer
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy import URL
+| Layer | Tool | Notes |
+|-------|------|-------|
+| Unit + Integration | **pytest** + **testcontainers** | Real PostgreSQL in Docker per test run |
+| Load testing | **k6** | JS/TS scripted, CI-integrated, outputs to Prometheus/InfluxDB |
+| Factory objects | **factory-boy** (Python) | Build test objects dynamically, not hardcoded fixtures |
 
-@pytest.fixture(scope="session")
-def postgres():
-    with PostgresContainer("postgres:17-alpine") as pg:
-        yield pg
-
-@pytest_asyncio.fixture(scope="session")
-async def engine(postgres):
-    # Build URL safely instead of naive string replacement
-    url = URL.create(
-        drivername="postgresql+asyncpg",
-        username=postgres.username,
-        password=postgres.password,
-        host=postgres.get_container_host_ip(),
-        port=postgres.get_exposed_port(5432),
-        database=postgres.dbname,
-    )
-    engine = create_async_engine(url)
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield engine
-    await engine.dispose()
-```
-
-### Factory Pattern
-
-Use factories (not fixtures with hardcoded data) to build test objects:
-
-```python
-# factory-boy example
-from uuid import uuid4
-import factory
-from factory.alchemy import SQLAlchemyModelFactory
-
-class UserFactory(SQLAlchemyModelFactory):
-    class Meta:
-        model = User
-
-    id = factory.LazyFunction(uuid4)
-    email = factory.Sequence(lambda n: f"user{n}@example.com")
-    name = factory.Faker("name")
-    role = "user"
-```
-
-### Load Testing & Chaos Engineering
-
-**k6** is the default. Scripted in JS/TS, integrates with CI, outputs InfluxDB/Prometheus metrics.
-
-```javascript
-// k6 smoke test
-import http from 'k6/http';
-import { check, sleep } from 'k6';
-
-export const options = { vus: 10, duration: '30s' };
-
-export default function () {
-  const res = http.get('http://localhost:8000/api/v1/users');
-  check(res, { 'status is 200': (r) => r.status === 200 });
-  sleep(1);
-}
-```
-
-**k6 disciplines**: smoke testing, stress testing (breakpoint detection), soak testing (memory leak detection), spike testing, browser emulation (POM), and Kubernetes chaos injection (xk6-disruptor).
+**k6 disciplines**: smoke, stress (breakpoint), soak (memory leaks), spike, browser emulation (POM), Kubernetes chaos (xk6-disruptor).
 
 ---
 
 ## 9. Platform Engineering & Observability
 
-### Infrastructure as Code (IaC)
+### Infrastructure as Code
 
 | Layer | Technology | Purpose |
 |-------|------------|---------|
@@ -604,7 +329,7 @@ export default function () {
 
 | Concern | Tool |
 |---------|------|
-| Tracing + metrics + logs | **OpenTelemetry** (vendor-neutral, OTEL SDK) |
+| Tracing + metrics + logs | **OpenTelemetry** (OTEL SDK) |
 | Structured logging Python | **structlog** |
 | Structured logging Node.js | **pino** |
 | Metrics scraping | **Prometheus** |
@@ -614,67 +339,23 @@ export default function () {
 | Trace backend | **Tempo** |
 | Metrics backend | **Mimir** |
 
-### OpenTelemetry Setup (FastAPI)
-
-```python
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-from opentelemetry.instrumentation.sqlalchemy import SQLAlchemyInstrumentor
-
-provider = TracerProvider()
-provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
-trace.set_tracer_provider(provider)
-
-FastAPIInstrumentor.instrument_app(app)
-SQLAlchemyInstrumentor().instrument(engine=engine)
-```
-
-### Structured Logging
-
-```python
-import structlog
-
-log = structlog.get_logger()
-
-# Context is carried through the request
-log.info("user.created", user_id=str(user.id), email=user.email, role=user.role)
-# Output: {"event": "user.created", "user_id": "...", "email": "...", "role": "user", "timestamp": "..."}
-```
-
 ### Health Check Endpoints
 
-```python
-@app.get("/health/live")
-async def liveness():
-    """Kubernetes liveness probe — is the process alive?"""
-    return {"status": "ok"}
+```
+/health/live   → Kubernetes liveness probe (is process alive?)
+/health/ready  → Kubernetes readiness probe (can serve traffic?)
 
-@app.get("/health/ready")
-async def readiness(db: AsyncSession = Depends(get_db), redis: Redis = Depends(get_redis)):
-    """Kubernetes readiness probe — can it serve traffic?"""
-    status = {"status": "ok"}
-    try:
-        await db.execute(text("SELECT 1"))
-        status["db"] = "ok"
-    except Exception:
-        raise HTTPException(status_code=503, detail="database unavailable")
-    try:
-        await redis.ping()
-        status["cache"] = "ok"
-    except Exception:
-        # Redis is a soft dependency — log but don't fail readiness
-        status["cache"] = "degraded"
-    return status
+Ready probe checks:
+  - DB: SELECT 1
+  - Redis: PING
+  - Soft dependencies (e.g., Redis as cache): degraded, not failing
 ```
 
 ---
 
 ## 10. Decision Framework
 
-Full architecture flowchart:
+### Quick Stack Selector
 
 ```
 1. LANGUAGE
@@ -737,60 +418,33 @@ Full architecture flowchart:
     └── Observability       → OpenTelemetry + structlog/pino + Sentry + /health/*
 ```
 
+### Red Flags
+
+- Raw SQL without parameterized statements → SQL injection
+- JWT/API keys in localStorage → security breach
+- Global state for server data → use server-state library (TanStack Query / SWR)
+- No separation between domain and infra → Clean Architecture instead
+- Skipping integration tests with real DB → Testcontainers
+- Monolith without modules → Modular Monolith first
+- Custom auth without refresh rotation → implement rotation + family tracking
+- No health checks in production → /live + /ready probes required
+- No structured logging → adopt structlog/pino + OTel
+- No ADRs on >2 dev projects → knowledge loss
+
 ---
-
-## Commands
-
-```bash
-# FastAPI project bootstrap
-uv init my-api && cd my-api
-uv add fastapi uvicorn[standard] sqlalchemy[asyncio] asyncpg pydantic-settings redis structlog
-
-# Run with hot reload
-uvicorn app.main:app --reload --port 8000
-
-# Fastify project bootstrap
-npm create fastify@latest my-api -- --lang=ts
-npm install @fastify/swagger @fastify/swagger-ui @fastify/rate-limit
-
-# Drizzle ORM setup
-npm install drizzle-orm pg && npm install -D drizzle-kit @types/pg
-npx drizzle-kit generate && npx drizzle-kit migrate
-
-# Testcontainers (Python)
-uv add --dev testcontainers pytest-asyncio factory-boy
-
-# k6 load test
-k6 run scripts/load-test.js
-
-# OpenTelemetry auto-instrumentation (Python)
-uv add opentelemetry-sdk opentelemetry-instrumentation-fastapi opentelemetry-instrumentation-sqlalchemy opentelemetry-exporter-otlp
-
-# pgvector (PostgreSQL)
-# In psql: CREATE EXTENSION vector;
-# Via Docker: docker pull ankane/pgvector
-
-# Temporal CLI
-brew install temporal  # macOS
-# or visit https://docs.temporal.io
-
-# Terraform / OpenTofu
-brew install terraform  # or opentofu
-```
 
 ## Resources
 
-- **FastAPI docs**: https://fastapi.tiangolo.com
-- **SQLAlchemy 2.0**: https://docs.sqlalchemy.org/en/20/
-- **Drizzle ORM**: https://orm.drizzle.team
-- **Testcontainers Python**: https://testcontainers-python.readthedocs.io
-- **OpenTelemetry Python**: https://opentelemetry-python.readthedocs.io
-- **k6 docs**: https://grafana.com/docs/k6/latest/
-- **Temporal**: https://docs.temporal.io
-- **pgvector**: https://github.com/pgvector/pgvector
-- **PowerSync**: https://www.powersync.com
-- **LangGraph**: https://langchain-ai.github.io/langgraph/
-- **AutoGen**: https://microsoft.github.io/autogen/
-- **Infisical**: https://infisical.com
-- **OpenTofu**: https://opentofu.org
-- **Argo CD**: https://argo-cd.readthedocs.io
+- FastAPI docs: https://fastapi.tiangolo.com
+- SQLAlchemy 2.0: https://docs.sqlalchemy.org/en/20/
+- Drizzle ORM: https://orm.drizzle.team
+- Prisma: https://www.prisma.io/
+- pgvector: https://github.com/pgvector/pgvector
+- LangGraph: https://langchain-ai.github.io/langgraph/
+- AutoGen: https://microsoft.github.io/autogen/
+- Temporal: https://docs.temporal.io
+- OpenTelemetry: https://opentelemetry.io/
+- k6 docs: https://grafana.com/docs/k6/
+- Testcontainers: https://testcontainers.com/
+- Infisical: https://infisical.com
+- Argo CD: https://argo-cd.readthedocs.io

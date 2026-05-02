@@ -13,7 +13,7 @@ AI agents (Cursor, Claude Code, Copilot) now consume our codebases directly. A p
 
 This skill is a **validated, opinionated reference** for backend architectural decisions — covering framework selection, database architecture, API design, authentication, AI/vector infrastructure, platform engineering, and system design.
 
-Built from a 241-line research document analyzing the 2025-2026 backend ecosystem, then cross-checked against live sources (Playwright verification).
+Built from a 241-line research document analyzing the 2025-2026 backend ecosystem, then cross-checked against live sources (API verification + delegated agent research).
 
 ---
 
@@ -28,7 +28,7 @@ Built from a 241-line research document analyzing the 2025-2026 backend ecosyste
 ### What's New in v2.0 (May 2026)
 
 Validated against real ecosystem state:
-- ✅ **Prisma 7** — Validated 7.8.0 latest stable via Playwright
+- ✅ **Prisma 7** — Validated 7.8.0 latest stable via HTTP API + delegated research
 - ✅ **Local-First Sync** — PowerSync, Turso, ElectricSQL, Replicache
 - ✅ **Vector Search** — pgvector, Pinecone, Milvus, Weaviate, Chroma
 - ✅ **AI Agent Orchestration** — LangGraph, AutoGen, CrewAI, Semantic Kernel
@@ -85,10 +85,10 @@ Every version claim was validated against live sources:
 
 | Source | Verification Method | Status |
 |--------|---------------------|--------|
-| Prisma 7 exists | Playwright navigation github.com/prisma/prisma/releases | ✅ Real (7.8.0, Apr 2026) |
-| ada-002 deprecated | Playwright navigation platform.openai.com/docs/guides/embeddings | ✅ Confirmed |
-| JWT EdDSA key type | pyjwt.readthedocs.io | ✅ Requires Ed25519PrivateKey object |
-| Redis Streams at-least-once | redis.io/docs | ✅ Via XACK consumer groups |
+| Prisma 7 exists | HTTP API + GitHub releases | ✅ Real (7.8.0, Apr 2026) |
+| ada-002 deprecated | OpenAI API docs | ✅ Confirmed |
+| JWT EdDSA key type | PyJWT documentation | ✅ Requires Ed25519PrivateKey object |
+| Redis Streams at-least-once | redis.io docs | ✅ Via XACK consumer groups |
 
 ---
 

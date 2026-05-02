@@ -10,7 +10,10 @@
 - **Auth Zero-Trust for AI** — Sandboxing, least-privilege, scoped JWTs
 - **Decision Framework** — 10-step architecture flowchart
 - **Bootstrap commands** section
-- **Verification table** with Playwright-validated sources
+- **Verification table** with live-source validation
+
+### Fixed
+- **v2.0-lite** — Rebuilt from clone of v2.0 to actual ~450-line condensed version: removed code blocks, extended narratives, Commands section, and full Resources. Matched frontend-architect-lite structure convention.
 
 ### Changed
 - **JWT** — EdDSA code fixed to use proper key objects; added aud/iss claims
@@ -34,7 +37,7 @@
 ---
 
 ### Verifications
-All version claims validated via Playwright and delegations against live sources (May 2026):
+All version claims validated via HTTP API + delegated agent research against live sources (May 2026):
 - ✅ github.com/prisma/prisma/releases (7.8.0) — confirmed real
 - ✅ platform.openai.com/docs/guides/embeddings (ada-002 deprecated) — confirmed real
 - ✅ pyjwt.readthedocs.io (Ed25519PrivateKey) — confirmed real
