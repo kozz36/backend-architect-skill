@@ -21,11 +21,12 @@ Built from a 241-line research document analyzing the 2025-2026 backend ecosyste
 
 | Version | File | Size | When to Use |
 |---------|------|------|-------------|
-| **v2.0** (Full) | [`versions/v2.0/SKILL.md`](versions/v2.0/SKILL.md) | ~800 lines | Senior architects, detailed decision-making, multiple patterns per section |
-| **v2.0-lite** | [`versions/v2.0-lite/SKILL.md`](versions/v2.0-lite/SKILL.md) | ~450 lines | Rapid kickoffs, MVP decisions, CI/CD ingestion, under time pressure |
+| **v3.0** (Current) | [`versions/v3.0/SKILL.md`](versions/v3.0/SKILL.md) | ~55 lines + references | Compact runtime skill with curated `references/` and May 2026 source index |
+| **v2.0** (Historical) | [`versions/v2.0/SKILL.md`](versions/v2.0/SKILL.md) | ~800 lines | Preserved for backward compatibility; verify claims against v3 source index before reuse |
+| **v2.0-lite** (Historical) | [`versions/v2.0-lite/SKILL.md`](versions/v2.0-lite/SKILL.md) | ~450 lines | Preserved for backward compatibility; v3.0 replaces it for active runtime ingestion |
 | **v1.0** (Original) | [`versions/v1.0/SKILL.md`](versions/v1.0/SKILL.md) | ~608 lines | Pre-2026 reference. Preserved for backward compatibility |
 
-### What's New in v2.0 (May 2026)
+### What's New in v3.0 (May 2026)
 
 Validated against real ecosystem state:
 - ✅ **Prisma 7** — Validated 7.8.0 latest stable via HTTP API + delegated research
@@ -54,7 +55,7 @@ git clone https://github.com/kozz36/backend-architect-skill.git
 
 ### For Human Architects
 
-Open `versions/v2.0/SKILL.md` and jump to:
+Open `versions/v3.0/SKILL.md` for the runtime contract, then use `versions/v3.0/references/technical-reference.md` for detailed matrices. Key reference areas:
 - **Section 1** — Framework Selection (decision matrix)
 - **Section 2** — Database Architecture (PostgreSQL, SQLite, vector DBs)
 - **Section 7** — Security & Auth (Zero-Trust, JWT, RBAC)
@@ -69,9 +70,14 @@ versions/
 ├── v1.0/
 │   └── SKILL.md              # Original (pre-2026)
 ├── v2.0/
-│   └── SKILL.md              # Full reference (2026)
-└── v2.0-lite/
-    └── SKILL.md              # Condensed for rapid decisions
+│   └── SKILL.md              # Historical full reference
+├── v2.0-lite/
+│   └── SKILL.md              # Historical condensed reference
+└── v3.0/
+    ├── SKILL.md              # Current compact runtime contract
+    └── references/
+        ├── technical-reference.md
+        └── source-index.md
 docs/
 ├── CHANGELOG.md              # Verified version history
 └── CONTRIBUTING.md           # How to contribute improvements
