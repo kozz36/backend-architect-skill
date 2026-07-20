@@ -3,7 +3,7 @@
 > **General-purpose** backend architecture skill for **stack definition at project start**.
 > Guides API design, database/ORM selection, auth patterns, caching, system design,
 > platform engineering, and AI/vector infrastructure.
-> Based on real ecosystem research validated against live sources (May 2026).
+> Based on real ecosystem research validated against live sources (July 2026).
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -21,22 +21,21 @@ Built from a 241-line research document analyzing the 2025-2026 backend ecosyste
 
 | Version | File | Size | When to Use |
 |---------|------|------|-------------|
-| **v3.0** (Current) | [`versions/v3.0/SKILL.md`](versions/v3.0/SKILL.md) | ~55 lines + references | Compact runtime skill with curated `references/` and May 2026 source index |
+| **v3.1** (Current) | [`versions/v3.1/SKILL.md`](versions/v3.1/SKILL.md) | Compact runtime + references | Runtime portability, storage licensing, embedded Postgres, durable execution, agent protocols, and OAuth hardening |
+| **v3.0** (Historical) | [`versions/v3.0/SKILL.md`](versions/v3.0/SKILL.md) | ~55 lines + references | May 2026 references-based runtime skill |
 | **v2.0** (Historical) | [`versions/v2.0/SKILL.md`](versions/v2.0/SKILL.md) | ~800 lines | Preserved for backward compatibility; verify claims against v3 source index before reuse |
-| **v2.0-lite** (Historical) | [`versions/v2.0-lite/SKILL.md`](versions/v2.0-lite/SKILL.md) | ~450 lines | Preserved for backward compatibility; v3.0 replaces it for active runtime ingestion |
+| **v2.0-lite** (Historical) | [`versions/v2.0-lite/SKILL.md`](versions/v2.0-lite/SKILL.md) | ~450 lines | Preserved for backward compatibility; v3.1 replaces it for active runtime ingestion |
 | **v1.0** (Original) | [`versions/v1.0/SKILL.md`](versions/v1.0/SKILL.md) | ~608 lines | Pre-2026 reference. Preserved for backward compatibility |
 
-### What's New in v3.0 (May 2026)
+### What's New in v3.1 (July 2026)
 
 Validated against real ecosystem state:
-- ✅ **Prisma 7** — Validated 7.8.0 latest stable via HTTP API + delegated research
-- ✅ **Local-First Sync** — PowerSync, Turso, ElectricSQL, Replicache
-- ✅ **Vector Search** — pgvector, Pinecone, Milvus, Weaviate, Chroma
-- ✅ **AI Agent Orchestration** — LangGraph, AutoGen, CrewAI, Semantic Kernel
-- ✅ **Backend for Frontend (BFF)** — Pattern, anti-patterns, protocol shift
-- ✅ **Platform Engineering** — Terraform/OpenTofu, ArgoCD, Infisical, LGTM
-- ⚠️ **openai-v3 embeddings** — ada-002 deprecated, text-embedding-3-small is current
-- ✅ **Zero-Trust Auth for AI** — Sandboxing, least-privilege, scoped JWTs
+- **Portable TypeScript APIs** — Hono is evaluated when Web Standards and multi-runtime deployment are real constraints.
+- **In-memory infrastructure** — Valkey, Redis, and managed services are compared by capability, licensing, support, and migration evidence.
+- **Embedded PostgreSQL** — PGlite supports local-first and fast-test use without replacing SQLite or production PostgreSQL parity tests.
+- **Durable execution** — replay, idempotency, workflow versioning, retries, cancellation, and recovery are explicit architecture requirements.
+- **Agent interoperability** — MCP and A2A are applied only at genuine tool/resource and remote-agent boundaries.
+- **Security** — OAuth 2.1 remains an Internet-Draft, and pgvector 0.8.2+ mitigates CVE-2026-3172.
 
 ---
 
@@ -55,11 +54,12 @@ git clone https://github.com/kozz36/backend-architect-skill.git
 
 ### For Human Architects
 
-Open `versions/v3.0/SKILL.md` for the runtime contract, then use `versions/v3.0/references/technical-reference.md` for detailed matrices. Key reference areas:
+Open `versions/v3.1/SKILL.md` for the runtime contract, then use `versions/v3.1/references/technical-reference.md` for detailed matrices. Key reference areas:
 - **Section 1** — Framework Selection (decision matrix)
 - **Section 2** — Database Architecture (PostgreSQL, SQLite, vector DBs)
-- **Section 7** — Security & Auth (Zero-Trust, JWT, RBAC)
-- **Section 13** — System Design (scalability patterns, load testing)
+- **Section 4** — Authentication and authorization
+- **Section 6** — AI and agentic orchestration
+- **Section 7** — Architecture patterns and durable workflows
 
 ---
 
@@ -73,7 +73,8 @@ versions/
 │   └── SKILL.md              # Historical full reference
 ├── v2.0-lite/
 │   └── SKILL.md              # Historical condensed reference
-└── v3.0/
+├── v3.0/                     # Historical May 2026 runtime
+└── v3.1/
     ├── SKILL.md              # Current compact runtime contract
     └── references/
         ├── technical-reference.md
