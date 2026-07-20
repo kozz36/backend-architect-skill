@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.1] - 2026-07-20
+
+### Added
+- Added runtime-portability gates for Hono, Bun, and CPython free-threaded builds.
+- Added conditional Valkey/Redis selection, PGlite local-first and testing guidance, and durable-execution invariants.
+- Added Microsoft Agent Framework, MCP, and A2A boundary guidance with explicit security controls.
+- Added OAuth 2.1 draft-status guidance and the pgvector 0.8.2 mitigation for CVE-2026-3172.
+
+### Changed
+- Preserved SQLite and real PostgreSQL where their semantics are required instead of treating PGlite as a universal replacement.
+- Kept stable Prisma as the production baseline while gating Prisma Next and preview adapters by maturity.
+- Replaced categorical vendor recommendations with capability, licensing, operational, and product-constraint decision gates.
+
 ## [v3.0] - 2026-05-15
 
 ### Added
