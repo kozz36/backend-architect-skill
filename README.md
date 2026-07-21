@@ -21,21 +21,21 @@ Built from a 241-line research document analyzing the 2025-2026 backend ecosyste
 
 | Version | File | Size | When to Use |
 |---------|------|------|-------------|
-| **v3.1** (Current) | [`versions/v3.1/SKILL.md`](versions/v3.1/SKILL.md) | Compact runtime + references | Runtime portability, storage licensing, embedded Postgres, durable execution, agent protocols, and OAuth hardening |
+| **v3.1.1** (Current) | [`versions/v3.1.1/SKILL.md`](versions/v3.1.1/SKILL.md) | Compact runtime + references | Independently verified precision patch for auth taxonomy, protocol maturity, operational gates, and source traceability |
+| **v3.1** (Historical) | [`versions/v3.1/SKILL.md`](versions/v3.1/SKILL.md) | Compact runtime + references | July 2026 runtime portability and architecture update |
 | **v3.0** (Historical) | [`versions/v3.0/SKILL.md`](versions/v3.0/SKILL.md) | ~55 lines + references | May 2026 references-based runtime skill |
 | **v2.0** (Historical) | [`versions/v2.0/SKILL.md`](versions/v2.0/SKILL.md) | ~800 lines | Preserved for backward compatibility; verify claims against v3 source index before reuse |
-| **v2.0-lite** (Historical) | [`versions/v2.0-lite/SKILL.md`](versions/v2.0-lite/SKILL.md) | ~450 lines | Preserved for backward compatibility; v3.1 replaces it for active runtime ingestion |
+| **v2.0-lite** (Historical) | [`versions/v2.0-lite/SKILL.md`](versions/v2.0-lite/SKILL.md) | ~450 lines | Preserved for backward compatibility; v3.1.1 replaces it for active runtime ingestion |
 | **v1.0** (Original) | [`versions/v1.0/SKILL.md`](versions/v1.0/SKILL.md) | ~608 lines | Pre-2026 reference. Preserved for backward compatibility |
 
-### What's New in v3.1 (July 2026)
+### What's New in v3.1.1 (July 2026)
 
-Validated against real ecosystem state:
-- **Portable TypeScript APIs** — Hono is evaluated when Web Standards and multi-runtime deployment are real constraints.
-- **In-memory infrastructure** — Valkey, Redis, and managed services are compared by capability, licensing, support, and migration evidence.
-- **Embedded PostgreSQL** — PGlite supports local-first and fast-test use without replacing SQLite or production PostgreSQL parity tests.
-- **Durable execution** — replay, idempotency, workflow versioning, retries, cancellation, and recovery are explicit architecture requirements.
-- **Agent interoperability** — MCP and A2A are applied only at genuine tool/resource and remote-agent boundaries.
-- **Security** — OAuth 2.1 remains an Internet-Draft, and pgvector 0.8.2+ mitigates CVE-2026-3172.
+Independently audited against primary sources:
+- Separates authentication, OAuth/OIDC authorization, sessions, and opaque or structured token representation.
+- Corrects refresh-token replay defenses, REST versioning, RateLimit draft maturity, and pgvector remediation.
+- Adds exact maturity gates for Microsoft Agent Framework, MCP policy, Hono portability, Prisma Next, and durable execution.
+- Removes categorical service-count, test-ratio, BFF ownership, IaC, observability-tool, and protocol-selection rules.
+- Pins Valkey license evidence to a content-addressed release commit.
 
 ---
 
@@ -54,7 +54,7 @@ git clone https://github.com/kozz36/backend-architect-skill.git
 
 ### For Human Architects
 
-Open `versions/v3.1/SKILL.md` for the runtime contract, then use `versions/v3.1/references/technical-reference.md` for detailed matrices. Key reference areas:
+Open `versions/v3.1.1/SKILL.md` for the runtime contract, then use `versions/v3.1.1/references/technical-reference.md` for detailed matrices. Key reference areas:
 - **Section 1** — Framework Selection (decision matrix)
 - **Section 2** — Database Architecture (PostgreSQL, SQLite, vector DBs)
 - **Section 4** — Authentication and authorization
@@ -74,7 +74,8 @@ versions/
 ├── v2.0-lite/
 │   └── SKILL.md              # Historical condensed reference
 ├── v3.0/                     # Historical May 2026 runtime
-└── v3.1/
+├── v3.1/                     # Historical July 2026 runtime
+└── v3.1.1/
     ├── SKILL.md              # Current compact runtime contract
     └── references/
         ├── technical-reference.md

@@ -1,5 +1,16 @@
 # Changelog
 
+## [v3.1.1] - 2026-07-20
+
+### Fixed
+- Separated authentication, OAuth/OIDC authorization, sessions, and token representation.
+- Corrected refresh-token replay defense, REST versioning, RateLimit draft maturity, MCP policy language, and pgvector remediation.
+- Replaced categorical framework, microservice, testing, BFF ownership, IaC, observability, and protocol rules with evidence-based gates.
+- Added immutable Valkey license evidence and claim-level source traceability for corrected guidance.
+
+### Verification
+- Independent read-only audit result: 0 BLOCKER, 0 HIGH, 0 MEDIUM findings.
+
 ## [v3.1] - 2026-07-20
 
 ### Added
