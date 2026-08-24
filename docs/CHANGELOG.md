@@ -1,5 +1,24 @@
 # Changelog
 
+## [v3.1.2] - Unreleased
+
+### Changed
+- Published `skills/backend-architect/` as the canonical full v3.1.2 skill and `skills/backend-architect-lite/` as the canonical lite v3.1.2 skill.
+- Declared `skills/` the sole current and installable skills.sh surface; retained `versions/` as a byte-preserved, non-discoverable historical archive.
+- Replaced the fixed `docs/product-charter.md` prerequisite with repository-native authoritative-source discovery; the path remains an example, not a requirement.
+- Restricted stack-selection blocking to materially insufficient product constraints or quality attributes after discovery.
+- Regenerated lite only from the exact v3.1.2 full runtime, technical reference, and source index; prior lite and archive artifacts are forbidden inputs.
+- Added `versions/v3.1.2-lite/ARCHIVE.md` as the byte-identical, non-discoverable lite archive.
+- Added a fail-closed full → lite derivation manifest, independent coverage matrix, and validator for source hashes, exact invariant IDs/categories and anchors, archive parity, discovery, and clean-install bytes; it explicitly does not prove semantic completeness.
+- Clarified SQLite/edge options as a shortlist requiring product, workload, consistency/recovery, deployment, and operational evidence rather than a broad production-viability claim.
+- Renamed every archived `versions/**/SKILL.md` manifest to byte-preserved `ARCHIVE.md`, including the v3.1.2 snapshot, so archive content is excluded from normal and full-depth skill discovery.
+
+### Verification
+- Confirmed the canonical full payload byte-matches `versions/v3.1.2/ARCHIVE.md` and its archived references.
+- Confirmed the v3.1.1 → v3.1.2 full snapshot diff is limited to the version metadata and repository-native source-discovery correction.
+- Confirmed normal and full-depth discovery expose only the two canonical `skills/**/SKILL.md` entries, not `versions/**/ARCHIVE.md`.
+- Ran the derivation validator and its missing, duplicate, extra, and renamed invariant-ID rejection cases.
+
 ## [v3.1.1] - 2026-07-20
 
 ### Fixed

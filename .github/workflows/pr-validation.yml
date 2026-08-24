@@ -10,6 +10,10 @@ jobs:
     name: PR Validation
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Validate full-derived lite artifact
+        run: bash scripts/validate-backend-architect-lite-derivation.sh --check
       - name: Check issue linkage
         uses: actions/github-script@v7
         with:
