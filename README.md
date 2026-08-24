@@ -19,7 +19,7 @@ Built from a 241-line research document analyzing the 2025-2026 backend ecosyste
 
 ## 📦 Canonical Skills and Archives
 
-`skills/` is the sole authoritative, current, and installable surface. `versions/` contains byte-preserved historical release archives only; its `ARCHIVE.md` manifests are deliberately non-discoverable and never installation targets.
+`skills/` is the sole authoritative, current, and installable surface. `versions/` contains byte-preserved release archives only; its `ARCHIVE.md` manifests are deliberately non-discoverable and never installation targets.
 
 | Canonical skill | Version | Installable file | When to use |
 |-----------------|---------|------------------|-------------|
@@ -31,13 +31,15 @@ Built from a 241-line research document analyzing the 2025-2026 backend ecosyste
 - Replaces the mandatory `docs/product-charter.md` dependency with repository-native authoritative-source discovery; that path is now only an example.
 - Blocks stack selection only when material product constraints or quality attributes remain insufficient after discovery.
 - Publishes independent canonical full and lite skills under `skills/`; archived release manifests remain byte-preserved and non-discoverable.
-- Audits lite guidance for stale path, layout, vendor-coupling, categorical, and version-sensitive claims using the v3.1.1 evidence base.
+- Rebuilds lite as a compact, same-version derivative of the exact full runtime, technical reference, and source index; prior lite and archive content are forbidden inputs.
+- Adds a fail-closed derivation manifest and CI validator for source hashes, invariant anchors, archive parity, discovery, and clean-install bytes.
 
 ### Historical Archives
 
 | Version | Archive | Notes |
 |---------|---------|-------|
 | v3.1.2 | [`versions/v3.1.2/ARCHIVE.md`](versions/v3.1.2/ARCHIVE.md) | Full v3.1.2 release snapshot |
+| v3.1.2-lite | [`versions/v3.1.2-lite/ARCHIVE.md`](versions/v3.1.2-lite/ARCHIVE.md) | Lite v3.1.2 release snapshot |
 | v3.1.1 | [`versions/v3.1.1/ARCHIVE.md`](versions/v3.1.1/ARCHIVE.md) | Previous full runtime release |
 | v3.1 | [`versions/v3.1/ARCHIVE.md`](versions/v3.1/ARCHIVE.md) | July 2026 runtime portability and architecture update |
 | v3.0 | [`versions/v3.0/ARCHIVE.md`](versions/v3.0/ARCHIVE.md) | May 2026 references-based runtime skill |
@@ -95,13 +97,31 @@ versions/                      # Byte-preserved, non-discoverable archive (not i
 ├── v3.0/
 ├── v3.1/
 ├── v3.1.1/
-└── v3.1.2/                    # Full v3.1.2 release snapshot
+├── v3.1.2/                    # Full v3.1.2 release snapshot
+└── v3.1.2-lite/               # Lite v3.1.2 release snapshot
+derivation/                    # Full → lite manifest; not installable
 docs/
 ├── CHANGELOG.md               # Verified version history
 └── CONTRIBUTING.md            # How to contribute improvements
 ```
 
 ---
+
+## 🔁 Full → Lite Derivation
+
+`backend-architect-lite` is a compact v3.1.2 derivative of exactly these full v3.1.2 inputs:
+
+- `skills/backend-architect/SKILL.md`
+- `skills/backend-architect/references/technical-reference.md`
+- `skills/backend-architect/references/source-index.md`
+
+Do not use a prior lite artifact or any `versions/**/ARCHIVE.md` as a derivation input. Update the full runtime and its current archive parity first, then derive lite at the same version, byte-copy it to `versions/v3.1.2-lite/ARCHIVE.md`, and update `derivation/backend-architect-lite-v3.1.2.json`. Validate with:
+
+```bash
+bash scripts/validate-backend-architect-lite-derivation.sh --self-test
+```
+
+The validator fails closed on declared source-hash drift, invariant ID/category or anchor drift, archive mismatch, discoverable archive skills, and clean-install byte mismatch. It validates mechanics only; human review remains responsible for semantic coverage. Use [`derivation/backend-architect-lite-v3.1.2-coverage.md`](derivation/backend-architect-lite-v3.1.2-coverage.md) for the independent review matrix.
 
 ## 🔍 Verification Methodology
 

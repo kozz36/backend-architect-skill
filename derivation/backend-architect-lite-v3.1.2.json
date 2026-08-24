@@ -1,0 +1,197 @@
+{
+  "schemaVersion": "1",
+  "derivation": {
+    "sourceVersion": "3.1.2",
+    "generatedVersion": "3.1.2",
+    "method": "Compact the exact full v3.1.2 runtime, technical reference, and source index. Do not use prior lite or archive content as an input.",
+    "semanticProof": "This manifest and its validator prove declared inputs, byte hashes, anchors, archive parity, and discovery constraints. They do not prove semantic equivalence or completeness; human review remains required."
+  },
+  "sourceFiles": [
+    {
+      "path": "skills/backend-architect/SKILL.md",
+      "sha256": "e3151203d02f4bba54d7c119dedf73dbc751ecc153f9ccb8d00886909079e659"
+    },
+    {
+      "path": "skills/backend-architect/references/technical-reference.md",
+      "sha256": "c02bfd6793225f358958e0dea48a3352e5315e453877e6f202e91861962d4014"
+    },
+    {
+      "path": "skills/backend-architect/references/source-index.md",
+      "sha256": "09a852086af042577e1ec9158d2689e1035f3de1c3a0f76057bc618e17cb52e8"
+    }
+  ],
+  "generated": {
+    "path": "skills/backend-architect-lite/SKILL.md",
+    "sha256": "73201789a008918db7c94ecb4efe0c7f96d07cfc98cd651129499c8d90460bf4",
+    "archivePath": "versions/v3.1.2-lite/ARCHIVE.md",
+    "version": "3.1.2"
+  },
+  "fullArchiveParity": [
+    {
+      "canonical": "skills/backend-architect/SKILL.md",
+      "archive": "versions/v3.1.2/ARCHIVE.md"
+    },
+    {
+      "canonical": "skills/backend-architect/references/technical-reference.md",
+      "archive": "versions/v3.1.2/references/technical-reference.md"
+    },
+    {
+      "canonical": "skills/backend-architect/references/source-index.md",
+      "archive": "versions/v3.1.2/references/source-index.md"
+    }
+  ],
+  "forbiddenInputs": [
+    "skills/backend-architect-lite/SKILL.md",
+    "versions/**/ARCHIVE.md",
+    "versions/**/SKILL.md"
+  ],
+  "invariants": [
+    {
+      "id": "activation-exclusions",
+      "category": "runtime-contract",
+      "sourcePath": "skills/backend-architect/SKILL.md",
+      "sourceAnchor": "Do not use this skill for generic explanation, copy editing, or one-off code changes that do not affect architecture or reusable implementation patterns.",
+      "liteAnchor": "Do not use this skill for generic explanation, copy editing, or one-off code changes that do not affect architecture or reusable implementation patterns."
+    },
+    {
+      "id": "source-discovery-stop-gate",
+      "category": "runtime-contract",
+      "sourcePath": "skills/backend-architect/SKILL.md",
+      "sourceAnchor": "If material product constraints or quality attributes remain insufficient after discovery, return the missing decisions as questions and stop selection.",
+      "liteAnchor": "If material inputs are insufficient to discriminate between options, return the missing decisions as questions and stop selection."
+    },
+    {
+      "id": "candidate-selection-conditionality",
+      "category": "decision-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "Treat every named technology and stack below as a candidate baseline, not a default.",
+      "liteAnchor": "Treat every named technology as a candidate, not a default."
+    },
+    {
+      "id": "runtime-portability",
+      "category": "runtime-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "Hono is built on Web Standards and supports edge runtimes, Deno, Bun, Node.js, and other compatible targets.",
+      "liteAnchor": "Hono portability still requires target-specific tests of adapters, middleware, sockets, filesystem access, and deployment bindings."
+    },
+    {
+      "id": "sqlite-edge-shortlist",
+      "category": "data-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "Treat the following as a shortlist, not a general production-viability claim.",
+      "liteAnchor": "Treat Litestream, Turso/libSQL, rqlite, and PowerSync as a shortlist, not a general production-viability claim."
+    },
+    {
+      "id": "pglite-parity-limits",
+      "category": "data-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "PGlite does not categorically replace SQLite or server PostgreSQL:",
+      "liteAnchor": "PGlite does not prove network drivers, authentication, pools, replication, failover, server configuration, planner behavior, production extensions, or unproven concurrency semantics."
+    },
+    {
+      "id": "data-license-legal-residency",
+      "category": "governance-gate",
+      "sourcePath": "skills/backend-architect/SKILL.md",
+      "sourceAnchor": "Treat runtime portability, dependency licensing, managed-service terms, and data residency as architecture inputs; obtain legal review instead of inferring license obligations.",
+      "liteAnchor": "Treat runtime portability, licensing, managed-service terms, residency, retention, and legal obligations as architecture inputs."
+    },
+    {
+      "id": "api-bff-protocol",
+      "category": "boundary-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "**Anti-pattern**: BFF must remain spartan. Do NOT absorb domain validations or heavy transactional logic.",
+      "liteAnchor": "Keep BFFs thin: orchestration and protocol translation only, never domain ownership."
+    },
+    {
+      "id": "auth-security",
+      "category": "security-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "OAuth grants authorization and is not a login protocol; OIDC adds authentication. JWT is one possible token format, not an alternative to OAuth or sessions.",
+      "liteAnchor": "OAuth is authorization, OIDC adds authentication, and JWT is a token format."
+    },
+    {
+      "id": "cache-compatibility",
+      "category": "operations-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "Do not add a cache by default.",
+      "liteAnchor": "Do not add a cache by default."
+    },
+    {
+      "id": "durable-workflows",
+      "category": "reliability-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "- Make external effects idempotent and assign stable idempotency keys.",
+      "liteAnchor": "use stable idempotency keys; define retry classes, backoff, deadlines, cancellation, compensation, poison handling, and manual recovery; version in-flight execution compatibility"
+    },
+    {
+      "id": "agent-trust-boundaries",
+      "category": "security-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "MCP and A2A are complementary, not mandatory internal abstractions.",
+      "liteAnchor": "A real portability or remote deployment boundary exists; do not add either inside one process by default."
+    },
+    {
+      "id": "pgvector-cve-remediation",
+      "category": "security-remediation",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "Inventory deployed pgvector versions and update affected installations to 0.8.2 or a later fixed release.",
+      "liteAnchor": "Inventory deployed versions and update affected installations to 0.8.2 or later fixed releases for CVE-2026-3172;"
+    },
+    {
+      "id": "privacy-observability",
+      "category": "operations-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "Bound event-history and payload growth; define retention, encryption, residency, and deletion.",
+      "liteAnchor": "bound history/payload growth with retention, encryption, residency, and deletion."
+    },
+    {
+      "id": "testing-production-parity",
+      "category": "validation-gate",
+      "sourcePath": "skills/backend-architect/references/technical-reference.md",
+      "sourceAnchor": "PGlite can accelerate lower-risk tests but does not prove server PostgreSQL parity.",
+      "liteAnchor": "PGlite can accelerate lower-risk tests but does not prove server PostgreSQL parity."
+    },
+    {
+      "id": "live-evidence-version-rules",
+      "category": "evidence-gate",
+      "sourcePath": "skills/backend-architect/references/source-index.md",
+      "sourceAnchor": "Do not add new version/API/security claims to `../SKILL.md` or `technical-reference.md` without checking the live source.",
+      "liteAnchor": "Re-check live primary sources before adding or changing a version, API, license, security, or protocol-maturity claim."
+    },
+    {
+      "id": "execution-order",
+      "category": "runtime-contract",
+      "sourcePath": "skills/backend-architect/SKILL.md",
+      "sourceAnchor": "Select the smallest architecture that satisfies the verified SoT inputs.",
+      "liteAnchor": "Select the smallest constraint-matched candidate stack; cite the exact source-of-truth constraint for every choice."
+    },
+    {
+      "id": "rejected-alternatives-risks-fallback",
+      "category": "output-contract",
+      "sourcePath": "skills/backend-architect/SKILL.md",
+      "sourceAnchor": "State the chosen pattern, rejected alternatives, and what breaks at runtime if the choice is wrong.",
+      "liteAnchor": "State rejected alternatives, runtime failure triggers, mitigation, validation evidence, and fallback."
+    },
+    {
+      "id": "output-contract",
+      "category": "output-contract",
+      "sourcePath": "skills/backend-architect/SKILL.md",
+      "sourceAnchor": "For every recommendation, the exact SoT constraint or quality attribute that justifies it.",
+      "liteAnchor": "The exact source-of-truth constraint or quality attribute justifying every recommendation."
+    }
+  ],
+  "omissions": [
+    {
+      "category": "rationale-and-examples",
+      "reason": "The lite artifact omits explanatory rationale and examples retained in the full technical reference."
+    },
+    {
+      "category": "exhaustive-tables",
+      "reason": "The lite artifact keeps decision gates but omits exhaustive matrices, tool lists, and repeated resources retained in the full reference."
+    },
+    {
+      "category": "repeated-links",
+      "reason": "The lite artifact relies on the full source index for detailed source links and verification records."
+    }
+  ]
+}

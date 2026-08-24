@@ -108,6 +108,24 @@ Original direct-push workflow (DEPRECATED — kept for historical reference):
 3. Update `docs/CHANGELOG.md`
 4. ~~Push to main~~ → **Use PR workflow above**
 
+## Full → Lite Derivation
+
+The canonical full runtime is the source of truth for the same-version lite runtime. A lite update must be a compact derivation of exactly these current full inputs:
+
+1. `skills/backend-architect/SKILL.md`
+2. `skills/backend-architect/references/technical-reference.md`
+3. `skills/backend-architect/references/source-index.md`
+
+Do not use `skills/backend-architect-lite/SKILL.md` from a prior state, any `versions/**/ARCHIVE.md`, or an archive `SKILL.md` as an input. First update and verify the full runtime plus its current v3.1.2 archive parity; then produce the lite runtime at the same `3.1.2` version, preserving activation, decision gates, safety constraints, and output contract while omitting only rationale, examples, exhaustive tables, and repeated links.
+
+Byte-copy the generated canonical lite file to `versions/v3.1.2-lite/ARCHIVE.md`; it is archive-only and never a discovery or installation target. Update `derivation/backend-architect-lite-v3.1.2.json` with the three source hashes, generated hash, invariant anchors, omissions, and forbidden inputs. Run:
+
+```bash
+bash scripts/validate-backend-architect-lite-derivation.sh --self-test
+```
+
+The validator is fail-closed for declared derivation mechanics, archive parity, normal/full-depth discovery, and clean-install bytes. It does not prove semantic completeness; review the full-to-lite coverage independently with `derivation/backend-architect-lite-v3.1.2-coverage.md`.
+
 ## Version Policy
 
 - **Patch (x.x.1)** — Corrections, clarifications, link fixes

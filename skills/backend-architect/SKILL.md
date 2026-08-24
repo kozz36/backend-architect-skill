@@ -66,5 +66,5 @@ Return:
 
 ## References
 
-- `references/technical-reference.md` — curated technical basis for v3.1.1 decisions.
+- `references/technical-reference.md` — curated technical basis for v3.1.2 decisions.
 - `references/source-index.md` — source links and verification status for version-sensitive claims.

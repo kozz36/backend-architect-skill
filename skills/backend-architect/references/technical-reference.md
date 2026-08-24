@@ -74,13 +74,13 @@ Use **pgvector** as a candidate vector baseline only when PostgreSQL is already 
 
 ### SQLite / Edge Persistence (validated May 2026)
 
-Production-viable for distributed and edge workloads:
+Treat the following as a shortlist, not a general production-viability claim. Select an option only when product requirements, measured write/read workload, consistency and recovery needs, and deployment/operational evidence support its model:
 - **Litestream**: streams WAL to S3/GCS — free disaster recovery
 - **Turso**: libSQL fork, edge-deployed, HTTP API, per-tenant DBs
 - **rqlite**: clustered SQLite with Raft — replicated, lightweight
 - **PowerSync**: bidirectional delta sync PostgreSQL ↔ SQLite
 
-Use when: single-region, low-concurrency writes, cost-sensitive, per-tenant isolation, or local-first architectures.
+Potential fits include single-region or low-concurrency writes, cost-sensitive or per-tenant isolation, and local-first architectures. Verify topology, write contention, replication/failover, latency, recovery objectives, provider terms, and operational ownership before adoption.
 
 ### PGlite and Local-First
 
