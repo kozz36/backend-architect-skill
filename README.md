@@ -19,7 +19,7 @@ Built from a 241-line research document analyzing the 2025-2026 backend ecosyste
 
 ## 📦 Canonical Skills and Archives
 
-`skills/` is the sole authoritative and installable surface. `versions/` contains immutable historical release snapshots only; it is not an installation target.
+`skills/` is the sole authoritative, current, and installable surface. `versions/` contains byte-preserved historical release archives only; its `ARCHIVE.md` manifests are deliberately non-discoverable and never installation targets.
 
 | Canonical skill | Version | Installable file | When to use |
 |-----------------|---------|------------------|-------------|
@@ -30,19 +30,20 @@ Built from a 241-line research document analyzing the 2025-2026 backend ecosyste
 
 - Replaces the mandatory `docs/product-charter.md` dependency with repository-native authoritative-source discovery; that path is now only an example.
 - Blocks stack selection only when material product constraints or quality attributes remain insufficient after discovery.
-- Publishes independent canonical full and lite skills under `skills/`; archived release directories remain unchanged.
+- Publishes independent canonical full and lite skills under `skills/`; archived release manifests remain byte-preserved and non-discoverable.
 - Audits lite guidance for stale path, layout, vendor-coupling, categorical, and version-sensitive claims using the v3.1.1 evidence base.
 
 ### Historical Archives
 
 | Version | Archive | Notes |
 |---------|---------|-------|
-| v3.1.1 | [`versions/v3.1.1/`](versions/v3.1.1/) | Previous full runtime release |
-| v3.1 | [`versions/v3.1/`](versions/v3.1/) | July 2026 runtime portability and architecture update |
-| v3.0 | [`versions/v3.0/`](versions/v3.0/) | May 2026 references-based runtime skill |
-| v2.0 | [`versions/v2.0/`](versions/v2.0/) | Historical full reference |
-| v2.0-lite | [`versions/v2.0-lite/`](versions/v2.0-lite/) | Historical condensed reference |
-| v1.0 | [`versions/v1.0/`](versions/v1.0/) | Original release |
+| v3.1.2 | [`versions/v3.1.2/ARCHIVE.md`](versions/v3.1.2/ARCHIVE.md) | Full v3.1.2 release snapshot |
+| v3.1.1 | [`versions/v3.1.1/ARCHIVE.md`](versions/v3.1.1/ARCHIVE.md) | Previous full runtime release |
+| v3.1 | [`versions/v3.1/ARCHIVE.md`](versions/v3.1/ARCHIVE.md) | July 2026 runtime portability and architecture update |
+| v3.0 | [`versions/v3.0/ARCHIVE.md`](versions/v3.0/ARCHIVE.md) | May 2026 references-based runtime skill |
+| v2.0 | [`versions/v2.0/ARCHIVE.md`](versions/v2.0/ARCHIVE.md) | Historical full reference |
+| v2.0-lite | [`versions/v2.0-lite/ARCHIVE.md`](versions/v2.0-lite/ARCHIVE.md) | Historical condensed reference |
+| v1.0 | [`versions/v1.0/ARCHIVE.md`](versions/v1.0/ARCHIVE.md) | Original release |
 
 ---
 
@@ -63,7 +64,7 @@ npx skills add kozz36/backend-architect-skill --skill backend-architect-lite
 npx skills add kozz36/backend-architect-skill@<published-ref> --skill backend-architect
 ```
 
-The `@...` suffix selects a Git ref, while `--skill` selects the canonical full or lite entry under `skills/`. Do not install from `versions/`.
+The `@...` suffix selects a Git ref, while `--skill` selects the canonical full or lite entry under `skills/`. Do not install from `versions/`: its `ARCHIVE.md` manifests are byte-preserved historical references and non-discoverable even with full-depth discovery.
 
 ### For Human Architects
 
@@ -87,7 +88,7 @@ skills/                        # Authoritative, installable skills.sh surface
 │       └── source-index.md
 └── backend-architect-lite/    # Lite v3.1.2
     └── SKILL.md
-versions/                      # Archive-only historical snapshots
+versions/                      # Byte-preserved, non-discoverable archive (not installable)
 ├── v1.0/
 ├── v2.0/
 ├── v2.0-lite/
