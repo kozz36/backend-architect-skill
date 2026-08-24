@@ -1,5 +1,18 @@
 # Changelog
 
+## [v3.1.2] - Unreleased
+
+### Changed
+- Published `skills/backend-architect/` as the canonical full v3.1.2 skill and `skills/backend-architect-lite/` as the canonical lite v3.1.2 skill.
+- Declared `skills/` the sole authoritative/installable skills.sh surface; retained `versions/` as archive-only historical snapshots.
+- Replaced the fixed `docs/product-charter.md` prerequisite with repository-native authoritative-source discovery; the path remains an example, not a requirement.
+- Restricted stack-selection blocking to materially insufficient product constraints or quality attributes after discovery.
+- Updated lite guidance using the v3.1.1 evidence base to remove stale categorical defaults, hard-coded BFF repository placement, unsupported team-size and test-ratio thresholds, and version-sensitive claims.
+
+### Verification
+- Confirmed the canonical full payload byte-matches `versions/v3.1.2/`.
+- Confirmed the v3.1.1 → v3.1.2 full snapshot diff is limited to the version metadata and repository-native source-discovery correction.
+
 ## [v3.1.1] - 2026-07-20
 
 ### Fixed
